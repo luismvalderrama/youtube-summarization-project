@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from googleapiclient.discovery import build
-import pandas as pd
 
 load_dotenv()
 
