@@ -88,4 +88,35 @@ def get_video_ids(upload_id):
     return video_ids
 
 
-get_video_ids(upload_id)
+all_video_ids = get_video_ids(upload_id)
+print(len(all_video_ids))
+
+
+def get_video_details(video_ids):
+    youtube = build("youtube", "v3", developerKey=G_API_KEY)
+
+    all_video_stats = []
+
+    for i in range(0, len(video_ids), 50):
+        request = youtube.videos().list(
+            part="snippet,statistics", id=",".join(video_ids[i : i + 50])
+        )
+        response = request.execute()
+
+        for video in response["items"]:
+            video_stats = dict(
+                Title=video["snippet"]["title"],
+                Published_date=video["snippet"]["publishedAt"],
+                View_Count=video["statistics"].get(
+                    "viewCount", "N/A"
+                ),  # Default to 'N/A' if missing
+                Like_Count=video["statistics"].get("likeCount", "N/A"),
+                Comment_Count=video["statistics"].get("commentCount", "N/A"),
+            )
+            all_video_stats.append(video_stats)
+
+    return all_video_stats
+
+
+video_details = get_video_details(all_video_ids)
+print(video_details)
