@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from googleapiclient.discovery import build
+import pandas as pd
 
 load_dotenv()
 
@@ -120,3 +121,7 @@ def get_video_details(video_ids):
 
 video_details = get_video_details(all_video_ids)
 print(video_details)
+
+video_data = pd.DataFrame(video_details)
+video_data.insert(0, "Video ID", all_video_ids)
+video_data
